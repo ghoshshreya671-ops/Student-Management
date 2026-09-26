@@ -1,0 +1,172 @@
+
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_STUDENTS 100
+
+// Structure to store student details
+struct Student {
+    int rollNo;
+    char name[50];
+    float cMarks;
+    float javaMarks;
+    float dbMarks;
+    float total;
+    float average;
+    char grade;
+};
+
+struct Student students[MAX_STUDENTS];
+int studentCount = 0;
+
+// Function to calculate grade
+char calculateGrade(float average) {
+    if (average >= 90)
+        return 'A';
+    else if (average >= 75)
+        return 'B';
+    else if (average >= 60)
+        return 'C';
+    else if (average >= 50)
+        return 'D';
+    else
+        return 'F';
+}
+
+// Function to add a student
+void addStudent() {
+    if (studentCount >= MAX_STUDENTS) {
+        printf("\nStudent limit reached!\n");
+        return;
+    }
+
+    printf("\nEnter Roll No: ");
+    scanf("%d", &students[studentCount].rollNo);
+
+    printf("Enter Name: ");
+    scanf(" %[^\n]", students[studentCount].name);
+
+    printf("Enter marks:\n");
+
+    printf("C     : ");
+    scanf("%f", &students[studentCount].cMarks);
+
+    printf("Java  : ");
+    scanf("%f", &students[studentCount].javaMarks);
+
+    printf("DB    : ");
+    scanf("%f", &students[studentCount].dbMarks);
+
+    // Calculate total
+    students[studentCount].total =
+        students[studentCount].cMarks +
+        students[studentCount].javaMarks +
+        students[studentCount].dbMarks;
+
+    // Calculate average
+    students[studentCount].average =
+        students[studentCount].total / 3;
+
+    // Calculate grade
+    students[studentCount].grade =
+        calculateGrade(students[studentCount].average);
+
+    studentCount++;
+
+    printf("\nStudent added successfully!\n");
+}
+
+// Function to display all students
+void displayStudents() {
+    int i;
+
+    if (studentCount == 0) {
+        printf("\nNo students found!\n");
+        return;
+    }
+
+    printf("\n%-10s %-15s %-10s %-12s %-5s\n",
+           "Roll No", "Name", "Total", "Average", "Grade");
+
+    printf("------------------------------------------------------------\n");
+
+    for (i = 0; i < studentCount; i++) {
+        printf("%-10d %-15s %-10.0f %-12.2f %-5c\n",
+               students[i].rollNo,
+               students[i].name,
+               students[i].total,
+               students[i].average,
+               students[i].grade);
+    }
+}
+
+// Function to search for a student
+void searchStudent() {
+    int rollNo;
+    int i;
+    int found = 0;
+
+    printf("\nEnter Roll No to search: ");
+    scanf("%d", &rollNo);
+
+    for (i = 0; i < studentCount; i++) {
+        if (students[i].rollNo == rollNo) {
+            printf("\nStudent Found!\n");
+            printf("Roll No : %d\n", students[i].rollNo);
+            printf("Name    : %s\n", students[i].name);
+            printf("C Marks : %.2f\n", students[i].cMarks);
+            printf("Java Marks : %.2f\n", students[i].javaMarks);
+            printf("DB Marks : %.2f\n", students[i].dbMarks);
+            printf("Total   : %.2f\n", students[i].total);
+            printf("Average : %.2f\n", students[i].average);
+            printf("Grade   : %c\n", students[i].grade);
+
+            found = 1;
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("\nStudent not found!\n");
+    }
+}
+
+// Main function
+int main() {
+    int choice;
+
+    do {
+        printf("\n\n===== STUDENT MANAGEMENT SYSTEM =====\n");
+        printf("1. Add Student\n");
+        printf("2. Display Students\n");
+        printf("3. Search Student\n");
+        printf("4. Exit\n");
+
+        printf("\nEnter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addStudent();
+                break;
+
+            case 2:
+                displayStudents();
+                break;
+
+            case 3:
+                searchStudent();
+                break;
+
+            case 4:
+                printf("\nExiting program...\n");
+                break;
+
+            default:
+                printf("\nInvalid choice! Please try again.\n");
+        }
+
+    } while (choice != 4);
+
+    return 0;
+}
